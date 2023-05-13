@@ -127,3 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+collision_finder.py
+luhn_algorithm.py
