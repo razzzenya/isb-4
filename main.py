@@ -1,9 +1,11 @@
 import sys
+import time
 
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+from card_number_recover import recover_card_num
 from file_manager import FileManager
 from luhn_algorithm import is_card_number_valid
 
@@ -34,7 +36,7 @@ class AppGUI(QWidget):
         quit_btn.clicked.connect(QCoreApplication.instance().quit)
 
     def select_settings_file(self) -> None:
-        """Method that initializes settings into a class card_number_finder
+        """Method that initializes settings into a class File_manager
         """
         try:
             path = QFileDialog.getOpenFileName(
@@ -47,10 +49,13 @@ class AppGUI(QWidget):
             done_msg.exec_()
             self.file_manager.settings_path = path
         except OSError:
+            self.file_manager.settings_path = SETTINGS_FILE
             QMessageBox.information(
                 self, "Settings", f"Settings file was not loaded from file {path}." f"The default path was applied.\nPath: {SETTINGS_FILE}")
 
     def check_card_number(self) -> None:
+        """Method that checks if the card number is valid
+        """
         if not self.file_manager.are_settings_loaded:
             self.select_settings_file()
         if is_card_number_valid(self.file_manager.load_text(self.file_manager.card_number_path)):
@@ -59,11 +64,34 @@ class AppGUI(QWidget):
             done_msg.setText("Bank card number is valid.")
             done_msg.setIcon(QMessageBox.Information)
             done_msg.exec_()
+        else:
+            done_msg = QMessageBox()
+            done_msg.setWindowTitle("Info message")
+            done_msg.setText("Bank card number is not valid.")
+            done_msg.setIcon(QMessageBox.Information)
+            done_msg.exec_()
 
     def recover_number(self) -> None:
         if not self.file_manager.are_settings_loaded:
             self.select_settings_file()
-        pass
+        card_number = recover_card_num(
+            self.file_manager.hash, self.file_manager.last_symbols, self.file_manager.bin)
+        if (not card_number):
+            done_msg = QMessageBox()
+            done_msg.setWindowTitle("Info message")
+            done_msg.setText("Failed to find card number.")
+            done_msg.setIcon(QMessageBox.Information)
+            done_msg.exec_()
+        else:
+            validation_mark = is_card_number_valid(card_number)
+            self.file_manager.write_output(
+                f"{card_number} is {validation_mark}")
+            done_msg = QMessageBox()
+            done_msg.setWindowTitle("Info message")
+            done_msg.setText(
+                "Search completed successfully. The card number and its validity are written to the file.")
+            done_msg.setIcon(QMessageBox.Information)
+            done_msg.exec_()
 
 
 if __name__ == "__main__":

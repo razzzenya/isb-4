@@ -17,6 +17,16 @@ class FileManager():
         self._plot_img_path = ""
         self._time_statistic_path = ""
 
+    def write_output(self, text: str) -> None:
+        """Writes output to a .txt file
+        """
+        try:
+            with open(self._output_path, "w") as file:
+                file.write(text)
+        except Exception as e:
+            logging.exception(f'Exception: {e}')
+            raise e
+
     def load_text(self, path: str) -> str:
         """Reads text from file
         Args:
