@@ -18,12 +18,20 @@ class FileManager():
         self._time_statistic_path = ""
 
     def load_text(self, path: str) -> str:
+        """Reads text from file
+        Args:
+            path (str): path to file
+
+        Returns:
+            str: text from file
+        """
         try:
             with open(path, "r") as file:
                 result = file.read()
             return result
         except Exception as e:
             logging.exception(f'Exception: {e}')
+            raise e
 
     @property
     def are_settings_loaded(self) -> bool:
@@ -68,6 +76,8 @@ class FileManager():
         return self._time_statistic_path
 
     def load_settings(self):
+        """Loads settings dictionary from .json file
+        """
         try:
             with open(self._settings_path, "r") as file:
                 data = json.load(file)
@@ -80,3 +90,4 @@ class FileManager():
                 self._time_statistic_path = data["time_statistic"]
         except Exception as e:
             logging.exception(f'Exception: {e}')
+            raise e
