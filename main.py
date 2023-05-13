@@ -76,8 +76,10 @@ class AppGUI(QWidget):
         """
         if not self.file_manager.are_settings_loaded:
             self.select_settings_file()
+        start = time()
         card_number = recover_card_num(
-            self.file_manager.hash, self.file_manager.last_symbols, self.file_manager.bin)
+            self.file_manager.hash, self.file_manager.last_symbols, self.file_manager.bin, int(self.file_manager.number_of_processes))
+        end = time()
         if (not card_number):
             done_msg = QMessageBox()
             done_msg.setWindowTitle("Info message")
