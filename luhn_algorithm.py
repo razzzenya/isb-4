@@ -10,8 +10,8 @@ def is_card_number_valid(card_number: str) -> bool:
     Returns:
         bool: comparison value of last digit and check digit
     """
-    logging.basicConfig(filename='luhn_algorithm.log', level=logging.DEBUG,
-                        format='%(asctime)s:%(levelname)s:%(message)s')
+    logging.basicConfig(filename="luhn_algorithm.log", level=logging.DEBUG,
+                        format="%(asctime)s:%(levelname)s:%(message)s")
     try:
         numbers_list = list(card_number)
         key = numbers_list[len(numbers_list)-1]
@@ -28,5 +28,5 @@ def is_card_number_valid(card_number: str) -> bool:
                 sum += numbers_list[i]
         return int(key) == 10 - ((sum % 10) % 10)
     except Exception as e:
-        logging.exception(f'Exception: {e}')
+        logging.exception(f"Exception: {e}")
         raise e

@@ -14,7 +14,7 @@ def recover_card_num(hash: str, last_symbols: str, bin: str) -> str:
         str: if the card number cannot be found, then an empty string will be returned, otherwise the card number will be returned
     """
     cores = mp.cpu_count()
-    args = [(hash, f'{bin}{i}{last_symbols}') for i in range(100000, 1000000)]
+    args = [(hash, f"{bin}{i}{last_symbols}") for i in range(100000, 1000000)]
     with mp.Pool(processes=cores) as p:
         results = p.starmap(check_hash, args)
         for index, result in enumerate(results):

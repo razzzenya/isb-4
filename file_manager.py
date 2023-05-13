@@ -5,8 +5,8 @@ import logging
 class FileManager():
 
     def __init__(self) -> None:
-        logging.basicConfig(filename='file_manager.log', level=logging.DEBUG,
-                            format='%(asctime)s:%(levelname)s:%(message)s')
+        logging.basicConfig(filename="file_manager.log", level=logging.DEBUG,
+                            format="%(asctime)s:%(levelname)s:%(message)s")
         self._are_settings_loaded = False
         self._settings_path = ""
         self._hash = ""
@@ -24,7 +24,7 @@ class FileManager():
             with open(self._output_path, "w") as file:
                 file.write(text)
         except Exception as e:
-            logging.exception(f'Exception: {e}')
+            logging.exception(f"Exception: {e}")
             raise e
 
     def load_text(self, path: str) -> str:
@@ -40,7 +40,7 @@ class FileManager():
                 result = file.read()
             return result
         except Exception as e:
-            logging.exception(f'Exception: {e}')
+            logging.exception(f"Exception: {e}")
             raise e
 
     @property
@@ -99,5 +99,5 @@ class FileManager():
                 self._plot_img_path = data["plot_img"]
                 self._time_statistic_path = data["time_statistic"]
         except Exception as e:
-            logging.exception(f'Exception: {e}')
+            logging.exception(f"Exception: {e}")
             raise e

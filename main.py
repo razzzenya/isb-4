@@ -72,6 +72,8 @@ class AppGUI(QWidget):
             done_msg.exec_()
 
     def recover_number(self) -> None:
+        """The method that picks up the card number and calls the output method from the FileManager class
+        """
         if not self.file_manager.are_settings_loaded:
             self.select_settings_file()
         card_number = recover_card_num(
