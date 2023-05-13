@@ -16,6 +16,7 @@ class FileManager():
         self._card_number_path = ""
         self._plot_img_path = ""
         self._time_statistic_path = ""
+        self._number_of_processes = ""
 
     def write_output(self, text: str) -> None:
         """Writes output to a .txt file
@@ -85,6 +86,10 @@ class FileManager():
     def time_statistic_path(self):
         return self._time_statistic_path
 
+    @property
+    def number_of_processes(self):
+        return self._number_of_processes
+
     def load_settings(self):
         """Loads settings dictionary from .json file
         """
@@ -98,6 +103,7 @@ class FileManager():
                 self._card_number_path = data["card_number"]
                 self._plot_img_path = data["plot_img"]
                 self._time_statistic_path = data["time_statistic"]
+                self._number_of_processes = data["number_of_processes"]
         except Exception as e:
             logging.exception(f"Exception: {e}")
             raise e
