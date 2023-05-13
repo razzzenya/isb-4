@@ -1,5 +1,6 @@
 import json
 import logging
+import csv
 
 
 class FileManager():
@@ -17,6 +18,15 @@ class FileManager():
         self._plot_img_path = ""
         self._time_statistic_path = ""
         self._number_of_processes = ""
+
+    def write_statistic(self, time: float, number_of_processes: int) -> None:
+        try:
+            with open(self._time_statistic_path, "a", newline="") as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([number_of_processes, time])
+        except Exception as e:
+            logging.exception(f"Exception: {e}")
+            raise e
 
     def write_output(self, text: str) -> None:
         """Writes output to a .txt file
@@ -103,7 +113,7 @@ class FileManager():
                 self._card_number_path = data["card_number"]
                 self._plot_img_path = data["plot_img"]
                 self._time_statistic_path = data["time_statistic"]
-                self._number_of_processes = data["number_of_processes"]
+                self._number_of_processes = self.load_text(data["number_of_processes"])
         except Exception as e:
             logging.exception(f"Exception: {e}")
             raise e

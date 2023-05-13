@@ -1,5 +1,5 @@
 import sys
-import time
+from time import time
 
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import *
@@ -57,7 +57,12 @@ class AppGUI(QWidget):
         """Method that checks if the card number is valid
         """
         if not self.file_manager.are_settings_loaded:
-            self.select_settings_file()
+            msg = QMessageBox()
+            msg.setWindowTitle("Info message")
+            msg.setText("Settings were not loaded!")
+            msg.setIcon(QMessageBox.Critical)
+            msg.exec_()
+            return
         if is_card_number_valid(self.file_manager.load_text(self.file_manager.card_number_path)):
             done_msg = QMessageBox()
             done_msg.setWindowTitle("Info message")
@@ -75,7 +80,12 @@ class AppGUI(QWidget):
         """The method that picks up the card number and calls the output method from the FileManager class
         """
         if not self.file_manager.are_settings_loaded:
-            self.select_settings_file()
+            msg = QMessageBox()
+            msg.setWindowTitle("Info message")
+            msg.setText("Settings were not loaded!")
+            msg.setIcon(QMessageBox.Critical)
+            msg.exec_()
+            return
         start = time()
         card_number = recover_card_num(
             self.file_manager.hash, self.file_manager.last_symbols, self.file_manager.bin, int(self.file_manager.number_of_processes))
@@ -96,6 +106,14 @@ class AppGUI(QWidget):
                 "Search completed successfully. The card number and its validity are written to the file.")
             done_msg.setIcon(QMessageBox.Information)
             done_msg.exec_()
+        self.file_manager.write_statistic(
+            end-start, self.file_manager.number_of_processes)
+        done_msg = QMessageBox()
+        done_msg.setWindowTitle("Info message")
+        done_msg.setText(
+            "An entry was successfully added to the statistics file.")
+        done_msg.setIcon(QMessageBox.Information)
+        done_msg.exec_()
 
 
 if __name__ == "__main__":
