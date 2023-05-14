@@ -23,6 +23,11 @@ class AppGUI(QWidget):
     def initUI(self) -> None:
         self.setWindowTitle("Card number finder application")
         self.resize(300, 300)
+        self.pbar = QProgressBar(self)
+        self.pbar.setGeometry(70, 180, 200, 25)
+        self.pbar.setMaximum(100)
+        label = QLabel("Recover card number progessbar:", parent=self)
+        label.move(70, 160)
         load_settings_btn = QPushButton("&Load settings", self)
         load_settings_btn.setToolTip("Loads .json settings file")
         load_settings_btn.clicked.connect(self.select_settings_file)
@@ -90,10 +95,15 @@ class AppGUI(QWidget):
             msg.setIcon(QMessageBox.Critical)
             msg.exec_()
             return
+        self.pbar.setValue(0)
+
+        def update_progress(progress: int) -> None:
+            self.pbar.setValue(progress)
         start = time()
         card_number = recover_card_num(
-            self.file_manager.hash, self.file_manager.last_symbols, self.file_manager.bin, int(self.file_manager.number_of_processes))
+            self.file_manager.hash, self.file_manager.last_symbols, self.file_manager.bin, int(self.file_manager.number_of_processes), update_progress)
         end = time()
+        self.pbar.setValue(0)
         if (not card_number):
             done_msg = QMessageBox()
             done_msg.setWindowTitle("Info message")

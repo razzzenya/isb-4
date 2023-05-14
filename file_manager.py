@@ -30,13 +30,10 @@ class FileManager():
             fig (plt): pyplot object
         """
         try:
-            # logging.getLogger("matplotlib.font_manager").disabled = True
             fig.savefig(self._plot_img_path)
         except Exception as e:
             logging.exception(f"Exception: {e}")
             raise e
-        # finally:
-        #     logging.getLogger("matplotlib.font_manager").disabled = False
 
     def load_statistic(self) -> dict:
         """Loads statistic from .csv file
