@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import *
 from card_number_recover import recover_card_num
 from file_manager import FileManager
 from luhn_algorithm import is_card_number_valid
+from plot import draw_plot
 
 SETTINGS_FILE = "files/settings.json"
 
@@ -31,6 +32,9 @@ class AppGUI(QWidget):
         recover_number_btn = QPushButton("&Recover bank card number", self)
         recover_number_btn.move(0, 60)
         recover_number_btn.clicked.connect(self.recover_number)
+        draw_plot_btn = QPushButton("&Draw statistics plot", self)
+        draw_plot_btn.move(0, 90)
+        draw_plot_btn.clicked.connect(self.draw_statistics_plot)
         quit_btn = QPushButton("&Quit", self)
         quit_btn.move(120, 270)
         quit_btn.clicked.connect(QCoreApplication.instance().quit)
@@ -112,6 +116,22 @@ class AppGUI(QWidget):
         done_msg.setWindowTitle("Info message")
         done_msg.setText(
             "An entry was successfully added to the statistics file.")
+        done_msg.setIcon(QMessageBox.Information)
+        done_msg.exec_()
+
+    def draw_statistics_plot(self):
+        if not self.file_manager.are_settings_loaded:
+            msg = QMessageBox()
+            msg.setWindowTitle("Info message")
+            msg.setText("Settings were not loaded!")
+            msg.setIcon(QMessageBox.Critical)
+            msg.exec_()
+            return
+        fig = draw_plot(self.file_manager.load_statistic())
+        self.file_manager.save_plot_image(fig)
+        done_msg = QMessageBox()
+        done_msg.setWindowTitle("Info message")
+        done_msg.setText("Plot image was saved successfully.")
         done_msg.setIcon(QMessageBox.Information)
         done_msg.exec_()
 

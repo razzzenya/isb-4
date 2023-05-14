@@ -1,6 +1,10 @@
+import csv
 import json
 import logging
-import csv
+
+import matplotlib.pyplot as plt
+
+logging.getLogger("matplotlib.font_manager").disabled = True
 
 
 class FileManager():
@@ -19,7 +23,47 @@ class FileManager():
         self._time_statistic_path = ""
         self._number_of_processes = ""
 
+    def save_plot_image(self, fig: plt) -> None:
+        """Saves .jpg image of plot
+
+        Args:
+            fig (plt): pyplot object
+        """
+        try:
+            # logging.getLogger("matplotlib.font_manager").disabled = True
+            fig.savefig(self._plot_img_path)
+        except Exception as e:
+            logging.exception(f"Exception: {e}")
+            raise e
+        # finally:
+        #     logging.getLogger("matplotlib.font_manager").disabled = False
+
+    def load_statistic(self) -> dict:
+        """Loads statistic from .csv file
+
+        Returns:
+            dict: dictionary where the number of cores is the key and the execution time are the values
+        """
+        try:
+            with open(self._time_statistic_path, "r", newline="") as csvfile:
+                reader = csv.reader(csvfile)
+                lines = list(reader)
+        except Exception as e:
+            logging.exception(f"Exception: {e}")
+            raise e
+        statistic = dict()
+        for line in lines:
+            cores, time = line
+            statistic[int(cores)] = float(time)
+        return statistic
+
     def write_statistic(self, time: float, number_of_processes: int) -> None:
+        """Writes statistic to .csv file
+
+        Args:
+            time (float): execution time
+            number_of_processes (int):
+        """
         try:
             with open(self._time_statistic_path, "a", newline="") as csvfile:
                 writer = csv.writer(csvfile)
@@ -39,7 +83,8 @@ class FileManager():
             raise e
 
     def load_text(self, path: str) -> str:
-        """Reads text from file
+        """Reads text from file  
+
         Args:
             path (str): path to file
 
@@ -113,7 +158,8 @@ class FileManager():
                 self._card_number_path = data["card_number"]
                 self._plot_img_path = data["plot_img"]
                 self._time_statistic_path = data["time_statistic"]
-                self._number_of_processes = self.load_text(data["number_of_processes"])
+                self._number_of_processes = self.load_text(
+                    data["number_of_processes"])
         except Exception as e:
             logging.exception(f"Exception: {e}")
             raise e
