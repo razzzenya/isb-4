@@ -27,7 +27,7 @@ def recover_card_num(hash: str, last_symbols: str, bin: str, cores: int = mp.cpu
 
 
 def check_hash(hash: str, card_number: str) -> bool:
-    """ompares the true hash with the hash that was obtained by hashing the card number
+    """Compares the true hash with the hash that was obtained by hashing the card number
 
     Args:
         hash (str):

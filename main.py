@@ -2,8 +2,8 @@ import sys
 from time import time
 
 from PyQt5.QtCore import QCoreApplication
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QLabel, QMessageBox,
+                             QProgressBar, QPushButton, QWidget)
 
 from card_number_recover import recover_card_num
 from file_manager import FileManager
